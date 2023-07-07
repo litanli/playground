@@ -1,2 +1,2 @@
-# fourier
-Fun with Fourier
+# probability and math toy demonstrations
+
