@@ -1,2 +1,2 @@
 # fourier
-Fun with Fourier analysis
+Fun with Fourier
