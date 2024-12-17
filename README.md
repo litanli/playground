@@ -1,2 +1,2 @@
-# probability and math toy demonstrations
+Probability and math toy demonstrations, tutorials.
 
