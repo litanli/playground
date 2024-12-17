@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "playground"
+version = "0.1.0"
+description = "Probability and math toy demonstrations, tutorials."
+authors = ["Litan Li <litan.li3@gmail.com>"]
+readme = "README.md"
+packages = [{include = "playground"}]
+
+[tool.poetry.dependencies]
+python = "^3.11.0"
+numpy = "^2.2.0"
+matplotlib = "^3.9.0"
+scipy = "^1.14.0"
+fastapi = "^0.115.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
