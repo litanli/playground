@@ -11,7 +11,8 @@ python = "^3.11.0"
 numpy = "^2.2.0"
 matplotlib = "^3.9.0"
 scipy = "^1.14.0"
-fastapi = "^0.115.0"
+fastapi = {version = "^0.115.0", extras = ["standard"]}
+
 
 [build-system]
 requires = ["poetry-core"]
