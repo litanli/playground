@@ -8,7 +8,7 @@ from uuid import UUID
 app = FastAPI()  # inherits from Starlette
 
 # Endpoints/paths - organizes concerns and resources
-# http://127.0.0.1:8000/ 
+# http://127.0.0.1:8000/
 # http://127.0.0.1:8000/docs, alternatively /redoc
 # http://127.0.0.1:8000/openapi.json
 
@@ -17,20 +17,20 @@ app = FastAPI()  # inherits from Starlette
 # One or more can be used to communicate with any endpoint.
 
 # Order matters: FastAPI will match the path with the first matching declared operation.
-# Path operation functions are declared to be used whenever a path and operation 
-# matches, and then FastAPI takes care of calling the function with the correct 
-# parameters, extracting the data from the request. E.g. defines logic for GET 
+# Path operation functions are declared to be used whenever a path and operation
+# matches, and then FastAPI takes care of calling the function with the correct
+# parameters, extracting the data from the request. E.g. defines logic for GET
 # requests to root path. So clients never call the function directly.
 @app.get("/")
 async def root():
     # FastAPI supports conversion of many types to JSON
-    return {"message": "Hello World"}  
+    return {"message": "Hello World"}
 
 # PATH PARAMS
 # Path param ``item_id``'s value gets passed to the function.
 # E.g. Go to http://127.0.0.1:8000/items/5, see response {"item_id": 5}
 # E.g. Go to http://127.0.0.1:8000/items/foo, see response {"detail":[{"type":
-# "int_parsing","loc":["path","item_id"],"msg":"Input should be a valid integer, 
+# "int_parsing","loc":["path","item_id"],"msg":"Input should be a valid integer,
 # unable to parse string as an integer","input":"foo"}]}
 # FastAPI provides type validation!
 # @app.get("/items/{item_id}")
@@ -53,7 +53,7 @@ async def get_model(model_name: ModelName):
         return {"model_name": model_name, "message": "Deep Learning FTW!"}
     return {"model_name": model_name, "message": "some other model"}
 
-# Recap 
+# Recap
 # By using standard Python type declarations, you get:
 # Editor support: error checks, autocompletion, etc.
 # Type conversion: path and query params gets converted to declared types
@@ -129,7 +129,7 @@ async def create_item(item: Item):
     return item
 
 # Mix of path params, query params, request body.
-# Function params that match path params are taken from the path 
+# Function params that match path params are taken from the path
 # Pydantic function params taken from request body.
 # Singular type (int, float, str, bool, etc.) function params interpreted as query params.
 # @app.put("/items/{item_id}")
@@ -202,12 +202,12 @@ class Item(BaseModel):
 
 
 
-# QUERY PARAM AND STRING VALIDATIONS - in general, any data (path params, query 
+# QUERY PARAM AND STRING VALIDATIONS - in general, any data (path params, query
 # params, request body) can and should be validated :).
 # Use Annotated to add metadata to function params - data about data.
 # http://127.0.0.1:8000/items/?q=test query ? triggers GET.
-# http://127.0.0.1:8000/items/?q=reeeaaaaaaaaaallylong returns 
-# {"detail":[{"type":"string_too_long","loc":["query","q"],"msg":"String should 
+# http://127.0.0.1:8000/items/?q=reeeaaaaaaaaaallylong returns
+# {"detail":[{"type":"string_too_long","loc":["query","q"],"msg":"String should
 # have at most 20 characters","input":"reeeaaaaaaaaaallylong","ctx":{"max_length":20}}]}
 # Similarly fastapi.Path(), Body(), Header(), Cookie(), pydantic.Field() all
 # inherit from Pydantic's FieldInfo class.
