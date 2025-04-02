@@ -1,7 +1,22 @@
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.2.0
+    rev: v5.0.0
     hooks:
-    -   id: check-yaml
-    -   id: end-of-file-fixer
-    -   id: trailing-whitespace
+      - id: check-added-large-files
+        description: Prevent giant files from being committed (default=500kB).
+      - id: check-toml
+        description: Attempts to load all TOML files to verify syntax.
+      - id: debug-statements
+        description: Check for debugger imports and breakpoint() calls.
+      - id: detect-private-key
+        description: Checks for the existence of private keys.
+      - id: end-of-file-fixer
+        description: Makes sure files end in a newline and only a newline.
+      - id: pretty-format-json
+        description: Pretty-formats JSON files.
+        exclude: .*\.ipynb$  # all .ipynb files
+        args:
+          - --autofix
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+        description: Trims trailing whitespace.
