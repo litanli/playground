@@ -20,3 +20,10 @@ repos:
       - id: trailing-whitespace
         args: [--markdown-linebreak-ext=md]
         description: Trims trailing whitespace.
+
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.11.2
+  hooks:
+    - id: ruff  # linter
+      args: [ --fix ]
+    - id: ruff-format  # formatter
