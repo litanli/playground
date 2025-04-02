@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Query, Body
+from fastapi import FastAPI, Body
 from enum import Enum
 from pydantic import BaseModel, Field, HttpUrl
 from typing import Annotated, Literal
@@ -16,6 +16,7 @@ app = FastAPI()  # inherits from Starlette
 # GET, POST, PUT, DELETE
 # One or more can be used to communicate with any endpoint.
 
+
 # Order matters: FastAPI will match the path with the first matching declared operation.
 # Path operation functions are declared to be used whenever a path and operation
 # matches, and then FastAPI takes care of calling the function with the correct
@@ -25,6 +26,7 @@ app = FastAPI()  # inherits from Starlette
 async def root():
     # FastAPI supports conversion of many types to JSON
     return {"message": "Hello World"}
+
 
 # PATH PARAMS
 # Path param ``item_id``'s value gets passed to the function.
@@ -37,11 +39,13 @@ async def root():
 # async def read_item(item_id: int):
 #     return {"item_id": item_id}
 
+
 # Using enums for path params. Inherit string so API docs will render correctly.
 class ModelName(str, Enum):
     alexnet = "alexnet"
     resnet = "resnet"
     lenet = "lenet"
+
 
 # E.g. http://127.0.0.1:8000/models/resnet returns {"model_name":"resnet","message":"some other model"}
 # Notice endpoint specifies a resource (i.e. models), while operation and function name are verbs.
@@ -52,6 +56,7 @@ async def get_model(model_name: ModelName):
     if model_name is ModelName.alexnet:
         return {"model_name": model_name, "message": "Deep Learning FTW!"}
     return {"model_name": model_name, "message": "some other model"}
+
 
 # Recap
 # By using standard Python type declarations, you get:
@@ -70,6 +75,7 @@ async def get_model(model_name: ModelName):
 # async def read_items(skip: int = 0, limit: int = 10):
 #     return db[skip : skip + limit]
 
+
 # Declare optional params by setting defaults, otherwise required.
 # /docs shows item_id and short are required while q is not.
 # E.g. http://127.0.0.1:8000/items/foo?short=0&q=blah return {"item_id":"foo","q":"blah","desc":"This item deserves a long description."}
@@ -83,12 +89,16 @@ async def read_item(item_id: str, short: bool, q: str | None = None):
         item.update({"desc": "This item deserves a long description."})
     return item
 
+
 # Multiple path params are identified like kwargs, order doesn't matter.
 # E.g. http://127.0.0.1:8000/users/0/items/foo returns {"user_id":0,"item":"some_foo_data"}
 db = {0: {"foo": "some_foo_data", "bar": "some_bar_data"}}
+
+
 @app.get("/users/{user_id}/items/{item_id}")
 async def read_user_item(user_id: int, item_id: str):
     return {"user_id": user_id, "item": db[user_id][item_id]}
+
 
 # Query params with a Pydantic model
 class FilterParams(BaseModel):
@@ -96,9 +106,6 @@ class FilterParams(BaseModel):
     offset: int = Field(0, ge=0)
     order_by: Literal["created_at", "updated_at"] = "created_at"
     tags: list[str] = []
-@app.get("/items/")
-async def read_items(filter_query: Annotated[FilterParams, Query()]):
-    return filter_query
 
 
 # REQUEST BODY (when path and query params are not enough) via Pydantic model.
@@ -110,7 +117,10 @@ class Item(BaseModel):
     name: str
     description: str | None = None
     price: float
+
+
 db = {}
+
 
 # Send data via ``curl``, Postman, ``requests`` module, etc.
 # curl -X 'POST' \
@@ -128,6 +138,7 @@ async def create_item(item: Item):
     db[item.id] = item
     return item
 
+
 # Mix of path params, query params, request body.
 # Function params that match path params are taken from the path
 # Pydantic function params taken from request body.
@@ -137,10 +148,12 @@ async def create_item(item: Item):
 #     db[item_id] = item
 #     return {"item_name": item.name, "item_id": item_id}
 
+
 # Multiple request bodies
 class User(BaseModel):
     username: str
     full_name: str | None = None
+
 
 # Request body includes both body params as keys.
 # curl -X 'POST' \
@@ -160,9 +173,11 @@ class User(BaseModel):
 #   }
 # }'
 
+
 @app.post("/items/{item_id}")
 async def update_items(item_id: int, item: Item, user: User):
     return {"item_id": item_id, "item": item, "user": user}
+
 
 # Nested request body
 class Image(BaseModel):
@@ -177,6 +192,7 @@ class Item(BaseModel):
     tax: float | None = None
     tags: set[str] = set()
     images: list[Image] | None = None
+
 
 # curl -X 'PUT' \
 #   'http://127.0.0.1:8000/items/0' \
@@ -199,7 +215,6 @@ class Item(BaseModel):
 # async def update_item(item_id: int, item: Item):
 #     results = {"item_id": item_id, "item": item}
 #     return results
-
 
 
 # QUERY PARAM AND STRING VALIDATIONS - in general, any data (path params, query
